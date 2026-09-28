@@ -565,6 +565,54 @@
   }
 
   /* =========================================================
+     REPRODUCTOR DE MÚSICA (esquina inferior derecha)
+     ========================================================= */
+  #playerWrap{
+    position: fixed;
+    bottom: 20px; right: 18px;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(20,5,10,.72);
+    border: 1px solid rgba(232,51,109,.55);
+    border-radius: 50px;
+    padding: 8px 16px 8px 10px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 0 18px rgba(232,51,109,.25);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity .8s ease, transform .8s ease;
+    pointer-events: none;
+  }
+  #playerWrap.visible{ opacity:1; transform:translateY(0); pointer-events:auto; }
+
+  #btnPlay{
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(232,51,109,.8);
+    background: rgba(232,51,109,.18);
+    color: var(--rosa-claro);
+    font-size: 15px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .2s, transform .15s;
+    flex-shrink: 0;
+  }
+  #btnPlay:hover{ background: rgba(232,51,109,.4); transform: scale(1.1); }
+  #btnPlay:active{ transform: scale(.93); }
+
+  #playerLabel{
+    font-family: "Dancing Script", cursive;
+    font-size: clamp(11px, 2.8vw, 13px);
+    color: rgba(255,180,200,.8);
+    white-space: nowrap;
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* =========================================================
      TORTA CON VELA "22"
      ========================================================= */
   #tortaWrap{
@@ -585,7 +633,7 @@
 
   /* Llama parpadeante */
   @keyframes parpadeoLlama{
-    0%,100%{ transform: scaleX(1)   scaleY(1)   translateY(0);   opacity:1;    }
+    0%,100%{ transform: scaleX(1)   scaleY(1)   translateY(0);    opacity:1;    }
     25%{     transform: scaleX(0.85) scaleY(1.1) translateY(-1px); opacity:0.9; }
     50%{     transform: scaleX(1.1)  scaleY(0.92) translateY(1px); opacity:1;   }
     75%{     transform: scaleX(0.9)  scaleY(1.08) translateY(-1px); opacity:0.95;}
@@ -618,6 +666,16 @@
 </style>
 </head>
 <body>
+
+<!-- ===================== REPRODUCTOR DE MÚSICA ===================== -->
+<!-- 🎵 REEMPLAZA "TU_ENLACE_AQUI" con la URL directa al MP3 o archivo de audio -->
+<audio id="audioFondo" loop preload="none">
+  <source src="TU_ENLACE_AQUI" type="audio/mpeg">
+</audio>
+<div id="playerWrap">
+  <button id="btnPlay" aria-label="Play/Pausa">▶</button>
+  <span id="playerLabel">HA-ASH — Lo Aprendí de Ti 🌹</span>
+</div>
 
 <!-- ===================== PANTALLA DE INICIO ===================== -->
 <div id="intro">
@@ -1472,6 +1530,41 @@ function activarLlegada(){
 }
 
 document.getElementById('boton').addEventListener('click', ()=>{ viajeActivo = true; }, { once:true });
+
+/* ============================================================
+   REPRODUCTOR DE MÚSICA
+   ============================================================ */
+(function initPlayer(){
+  const audio    = document.getElementById('audioFondo');
+  const wrap     = document.getElementById('playerWrap');
+  const btn      = document.getElementById('btnPlay');
+  let reproduciendo = false;
+
+  function play(){
+    audio.play().then(()=>{
+      reproduciendo = true;
+      btn.textContent = '⏸';
+    }).catch(()=>{});
+  }
+  function pause(){
+    audio.pause();
+    reproduciendo = false;
+    btn.textContent = '▶';
+  }
+
+  btn.addEventListener('click', ()=>{
+    reproduciendo ? pause() : play();
+  });
+
+  // El reproductor aparece cuando arranca el viaje
+  document.getElementById('boton').addEventListener('click', ()=>{
+    setTimeout(()=>{
+      wrap.classList.add('visible');
+      // Intentar autoplay (funciona en muchos navegadores tras interacción del usuario)
+      play();
+    }, 1200);
+  }, { once: true });
+})();
 
 /* ============================================================
    6) CARRUSEL DE SOBRES CON FOTOS
