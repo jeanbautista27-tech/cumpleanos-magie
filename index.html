@@ -569,17 +569,17 @@
      ========================================================= */
   #playerWrap{
     position: fixed;
-    bottom: 20px; right: 18px;
+    bottom: 16px; right: 14px;
     z-index: 40;
     display: flex;
     align-items: center;
-    gap: 10px;
-    background: rgba(20,5,10,.72);
-    border: 1px solid rgba(232,51,109,.55);
+    gap: 7px;
+    background: rgba(20,5,10,.78);
+    border: 1px solid rgba(232,51,109,.5);
     border-radius: 50px;
-    padding: 8px 16px 8px 10px;
+    padding: 5px 12px 5px 6px;
     backdrop-filter: blur(8px);
-    box-shadow: 0 0 18px rgba(232,51,109,.25);
+    box-shadow: 0 0 12px rgba(232,51,109,.2);
     opacity: 0;
     transform: translateY(10px);
     transition: opacity .8s ease, transform .8s ease;
@@ -588,12 +588,12 @@
   #playerWrap.visible{ opacity:1; transform:translateY(0); pointer-events:auto; }
 
   #btnPlay{
-    width: 36px; height: 36px;
+    width: 28px; height: 28px;
     border-radius: 50%;
-    border: 1.5px solid rgba(232,51,109,.8);
-    background: rgba(232,51,109,.18);
+    border: 1px solid rgba(232,51,109,.75);
+    background: rgba(232,51,109,.2);
     color: var(--rosa-claro);
-    font-size: 15px;
+    font-size: 12px;
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
     transition: background .2s, transform .15s;
@@ -604,10 +604,10 @@
 
   #playerLabel{
     font-family: "Dancing Script", cursive;
-    font-size: clamp(11px, 2.8vw, 13px);
-    color: rgba(255,180,200,.8);
+    font-size: 11px;
+    color: rgba(255,180,200,.75);
     white-space: nowrap;
-    max-width: 140px;
+    max-width: 110px;
     overflow: hidden;
     text-overflow: ellipsis;
   }
@@ -1556,13 +1556,12 @@ document.getElementById('boton').addEventListener('click', ()=>{ viajeActivo = t
     reproduciendo ? pause() : play();
   });
 
-  // El reproductor aparece cuando arranca el viaje
-  document.getElementById('boton').addEventListener('click', ()=>{
+  // La música arranca cuando se abre el sobre de la intro
+  document.getElementById('sobreWrap').addEventListener('click', ()=>{
     setTimeout(()=>{
       wrap.classList.add('visible');
-      // Intentar autoplay (funciona en muchos navegadores tras interacción del usuario)
       play();
-    }, 1200);
+    }, 600);
   }, { once: true });
 })();
 
